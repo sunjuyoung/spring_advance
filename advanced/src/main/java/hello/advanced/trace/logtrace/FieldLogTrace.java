@@ -11,25 +11,27 @@ public class FieldLogTrace implements LogTrace{
     private static final String COMPLETE_PREFIX = "<---";
     private static final String EX_PREFIX = "<X--";
 
-    private TraceId traceIdHolder; //traceId 동기화, 동시성 이슈 발생
+
+    private TraceId traceHolder;
 
     @Override
     public TraceStatus begin(String message) {
-        syncTraceId();
-        TraceId traceId = traceIdHolder;
-        Long startTimeMs = System.currentTimeMillis();
+       TraceId traceId = new TraceId();
+        Long startTime = System.currentTimeMillis();
+        
+        log.info("[{}] {}{}",traceId.getId(),addSpace(START_PREFIX,traceId.getLevel()),message);
 
-        log.info("[{}] {}{}", traceId.getId(), addSpace(START_PREFIX, traceId.getLevel()),message);
-        //로그 출력
-        return new TraceStatus(traceId,startTimeMs,message);
+
+
+        return null;
     }
 
-    private void syncTraceId(){
-        if(traceIdHolder == null){
-            traceIdHolder = new TraceId();
-        }else {
-            traceIdHolder = traceIdHolder.createNextId();
+    private static String addSpace(String prefix, int level) {
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<level; i++){
+            sb.append((i == level -1)? "|"+prefix : "|    ");
         }
+        return sb.toString();
     }
 
     @Override
@@ -42,44 +44,8 @@ public class FieldLogTrace implements LogTrace{
         complete(status,e);
     }
 
-
-
     private void complete(TraceStatus status, Exception e) {
-        Long stopTimeMs = System.currentTimeMillis();
-        long resultTimeMs = stopTimeMs - status.getStartTimeMs();
-        TraceId traceId = status.getTraceId();
-        if(e == null){
-            log.info("[{}] {}{} time={}ms",traceId.getId(),addSpace(COMPLETE_PREFIX,traceId.getLevel()),
-                    status.getMessage(),resultTimeMs);
-
-        }else {
-            log.info("[{}] {}{} time={}ms ex={}",traceId.getId(), addSpace(EX_PREFIX,traceId.getLevel()),
-                    status.getMessage(),resultTimeMs,e.toString());
-        }
-
-        releaseTraceId();
-
+        Long endTime = System.currentTimeMillis();
+        Long resultTime = endTime -  status.getStartTimeMs();
     }
-
-    private void releaseTraceId() {
-        if(traceIdHolder.isFirst()){
-            traceIdHolder = null; //destroy
-        }else {
-            traceIdHolder = traceIdHolder.createPrevId();
-        }
-    }
-
-    // leve =0,
-    // level =1 |-->
-    //level =2  |   -->
-    private static String addSpace(String prefix, int level){
-        StringBuilder sb = new StringBuilder();
-
-        for(int i=0; i< level; i++){
-            sb.append((i== level - 1)? "|" + prefix : "|    ");
-        }
-        return sb.toString();
-    }
-
-
 }
