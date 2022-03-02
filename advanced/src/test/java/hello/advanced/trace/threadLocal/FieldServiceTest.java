@@ -4,6 +4,8 @@ import hello.advanced.trace.threadLocal.code.FieldService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.CountDownLatch;
+
 @Slf4j
 public class FieldServiceTest {
 
@@ -11,6 +13,7 @@ public class FieldServiceTest {
 
     @Test
     public void field(){
+
         log.info("main start");
         Runnable userA = () ->{
             fieldService.logic("userA");
@@ -20,21 +23,25 @@ public class FieldServiceTest {
         };
 
         Thread threadA = new Thread(userA);
-        threadA.setName("threadA");
-
+        log.info("thread userA");
         Thread threadB = new Thread(userB);
-        threadA.setName("threadB");
+        log.info("thread userB");
 
         threadA.start();
-        sleep(2000);
+        sleep(100);
         threadB.start();
+
+        sleep(2000);
+        log.info("thread exit");
     }
 
-    private void sleep(int i) {
+    private void sleep(int mills){
         try {
-            Thread.sleep(i);
+            Thread.sleep(mills);
         }catch (InterruptedException e){
             e.printStackTrace();
         }
+
     }
+
 }
