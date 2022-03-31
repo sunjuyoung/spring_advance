@@ -24,6 +24,7 @@ public class TemplateMethodTest {
         long startTime = System.currentTimeMillis();
 
 
+
         log.info("비스니스 로직1 실행");
 
         long endTime = System.currentTimeMillis();
