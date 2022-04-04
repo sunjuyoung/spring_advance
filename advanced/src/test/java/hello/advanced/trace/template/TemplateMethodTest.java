@@ -23,8 +23,6 @@ public class TemplateMethodTest {
     private void logic() {
         long startTime = System.currentTimeMillis();
 
-
-
         log.info("비스니스 로직1 실행");
 
         long endTime = System.currentTimeMillis();
@@ -78,11 +76,8 @@ public class TemplateMethodTest {
         };
 
         template2.execute();
-        //given
 
-       //when
 
-       //then
 
     }
 }
