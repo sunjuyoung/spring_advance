@@ -7,6 +7,7 @@ public class AImpl implements AInterface{
 
     @Override
     public String call() {
-        return null;
+        log.info("A 호출");
+        return "A";
     }
 }

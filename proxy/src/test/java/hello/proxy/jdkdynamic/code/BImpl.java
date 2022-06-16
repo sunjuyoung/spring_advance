@@ -7,6 +7,7 @@ public class BImpl implements BInterface{
 
     @Override
     public String call() {
-        return null;
+        log.info("B 호출");
+        return "B";
     }
 }
