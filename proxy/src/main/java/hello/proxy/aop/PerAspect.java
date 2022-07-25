@@ -26,20 +26,17 @@ public class PerAspect {
         return retVal;
     }
 
-    @Around("bean(simpleEventService)")
+/*    @Around("bean(simpleEventService)")
     public Object bean(ProceedingJoinPoint pjp) throws Throwable{
         long begin = System.currentTimeMillis();
         Object retVal = pjp.proceed();
         System.out.println(System.currentTimeMillis() - begin);
         return retVal;
-    }
+    }*/
 
     @Before("bean(simpleEventService)")
-    public Object before(ProceedingJoinPoint pjp) throws Throwable{
-        long begin = System.currentTimeMillis();
-        Object retVal = pjp.proceed();
-        System.out.println(System.currentTimeMillis() - begin);
-        return retVal;
+    public void before( ) throws Throwable{
+        System.out.println("hello");
     }
 
 }
