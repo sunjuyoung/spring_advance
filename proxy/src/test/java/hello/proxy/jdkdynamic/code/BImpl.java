@@ -10,4 +10,6 @@ public class BImpl implements BInterface{
         log.info("B 호출");
         return "B";
     }
+    
+
 }
